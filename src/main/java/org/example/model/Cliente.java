@@ -1,5 +1,7 @@
 package org.example.model;
 
+import org.example.model.enums.StatusEntrega;
+
 public class Cliente {
 
     private int id;

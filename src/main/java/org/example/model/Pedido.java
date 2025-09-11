@@ -1,5 +1,7 @@
 package org.example.model;
 
+import org.example.model.enums.StatusPedido;
+
 public class Pedido {
 
     private int idPedido;
@@ -7,10 +9,18 @@ public class Pedido {
     private String dataPedido;
     private double volumeM3;
     private double pesoKg;
-    private String status;
+    private StatusPedido status;
 
-    public Pedido(int idPedido, int idCliente, String dataPedido, double volumeM3, double pesoKg, String status) {
+    public Pedido(int idPedido, int idCliente, String dataPedido, double volumeM3, double pesoKg, StatusPedido status) {
         this.idPedido = idPedido;
+        this.idCliente = idCliente;
+        this.dataPedido = dataPedido;
+        this.volumeM3 = volumeM3;
+        this.pesoKg = pesoKg;
+        this.status = status;;
+    }
+
+    public Pedido(int idCliente,String dataPedido, double volumeM3, double pesoKg, StatusPedido status) {
         this.idCliente = idCliente;
         this.dataPedido = dataPedido;
         this.volumeM3 = volumeM3;
@@ -58,11 +68,11 @@ public class Pedido {
         this.pesoKg = pesoKg;
     }
 
-    public String getStatus() {
+    public StatusPedido getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusPedido status) {
         this.status = status;
     }
 }

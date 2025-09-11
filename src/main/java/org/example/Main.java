@@ -1,9 +1,15 @@
 package org.example;//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 
 import org.example.dao.ClienteDAO;
+import org.example.dao.EntregaDAO;
 import org.example.dao.MotoristaDAO;
+import org.example.dao.PedidoDAO;
 import org.example.model.Cliente;
+import org.example.model.Entrega;
 import org.example.model.Motorista;
+import org.example.model.Pedido;
+import org.example.model.enums.StatusEntrega;
+import org.example.model.enums.StatusPedido;
 
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -41,16 +47,33 @@ public class Main {
                     """);
             int opcao = leiaNum.nextInt();
 
-            switch (opcao){
+            switch (opcao) {
                 case 1: {
                     cadastrarCliente();
                     break;
                 }
-                case 2:{
+                case 2: {
                     cadastrarMotorista();
                     break;
                 }
+                case 3: {
+                    criarPedido();
+                    break;
+                }
+                case 4: {
+                    criarEntrega();
+                    break;
+                }
+                case 0: {
+                    sair = true;
+                    System.out.println("Encerrando sistema");
+                    break;
+                }
             }
+                if(!sair){
+                    inicio();
+                }
+
 
 
         }
@@ -103,8 +126,56 @@ public class Main {
 
         }
 
+        public static void criarPedido(){
+            System.out.println("===== Criar pedidos =====");
+            System.out.println("Digite o id do cliente: ");
+            int idCliente = leiaNum.nextInt();
+            System.out.println("Digite a data do pedido (YYYY-MM-DD): ");
+            String dataPedido = leiaStr.nextLine();
+            System.out.println("Digite o volume (M3): ");
+            Double volumeM3 = leiaNum.nextDouble();
+            System.out.println("Digite o peso (KG): ");
+            Double pesoKG = leiaNum.nextDouble();
+            leiaNum.nextLine();
+            System.out.println("Digite o status do pedido(PENDENTE, ENTREGUE, CANCELADO): ");
+            String statusStr = leiaStr.nextLine().toUpperCase();
+            StatusPedido statusPedido = StatusPedido.valueOf(statusStr);
 
 
+            var pedido = new Pedido(idCliente, dataPedido, volumeM3, pesoKG, statusPedido);
+            var pedidoDao = new PedidoDAO();
+
+            try{
+                pedidoDao.registrarPedido(pedido);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public static void criarEntrega(){
+            System.out.println("==== Atribuindo entregas ====");
+            System.out.println("Digite o id do pedido que deseja atribuir");
+            int idPedido = leiaNum.nextInt();
+            System.out.println("Digite o id do motorista que deseja atribuir");
+            int idMotorista = leiaNum.nextInt();
+            System.out.println("Digite a data de saída do pedido (YYYY-MM-DD): ");
+            String dataSaida = leiaStr.nextLine();
+            System.out.println("Digite a data de entrega do pedido (YYYY-MM-DD): ");
+            String dataEntrega = leiaStr.nextLine();
+            System.out.println("Digite o status do pedido(EM_ROTA, ENTREGUE, ATRASADA): ");
+            String statusStr = leiaStr.nextLine().toUpperCase();
+            StatusEntrega StatusEntrega = org.example.model.enums.StatusEntrega.valueOf(statusStr);
+
+            var entrega = new Entrega(idPedido, idMotorista, dataSaida, dataEntrega, statusStr);
+            var entregaDao = new EntregaDAO();
+
+            try{
+                entregaDao.criarEntrega(entrega);
+                System.out.println("Atribuido com sucesso!");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
 
     }
