@@ -1,17 +1,12 @@
 package org.example;//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 
-import org.example.dao.ClienteDAO;
-import org.example.dao.EntregaDAO;
-import org.example.dao.MotoristaDAO;
-import org.example.dao.PedidoDAO;
-import org.example.model.Cliente;
-import org.example.model.Entrega;
-import org.example.model.Motorista;
-import org.example.model.Pedido;
+import org.example.dao.*;
+import org.example.model.*;
 import org.example.model.enums.StatusEntrega;
 import org.example.model.enums.StatusPedido;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Scanner;
 
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -62,6 +57,10 @@ public class Main {
                 }
                 case 4: {
                     criarEntrega();
+                    break;
+                }
+                case 5:{
+                    criarHistorico();
                     break;
                 }
                 case 0: {
@@ -177,5 +176,24 @@ public class Main {
             }
         }
 
+        public static void criarHistorico(){
+            System.out.println("==== Registrando histórico ====");
+            System.out.println("Digite o id da entrega");
+            int idEntrega = leiaNum.nextInt();
+            System.out.println("Digite a data do evento (YYYY-MM-DD / HH:MM:SS): ");
+            String dataEventoStr = leiaStr.nextLine();
+            System.out.println("Digite a descrição: ");
+            String descricao = leiaStr.nextLine();
+
+            var historico = new HistoricoEntrega(idEntrega, dataEventoStr, descricao);
+            var historicoDao = new HistoricoEntregaDAO();
+
+            try {
+                historicoDao.criarHistorico(historico);
+            }catch (SQLException e){
+                System.out.println("Erro no DB");
+                e.printStackTrace();
+            }
+        }
 
     }

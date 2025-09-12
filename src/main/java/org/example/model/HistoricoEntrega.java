@@ -14,6 +14,12 @@ public class HistoricoEntrega {
         this.descricao = descricao;
     }
 
+    public HistoricoEntrega(int idEntrega, String dataEvento, String descricao) {
+        this.idEntrega = idEntrega;
+        this.dataEvento = dataEvento;
+        this.descricao = descricao;
+    }
+
     public int getIdHistorico() {
         return idHistorico;
     }
