@@ -1,5 +1,7 @@
 package org.example.model;
 
+import org.example.model.enums.StatusEntrega;
+
 public class Entrega {
 
     private int idEntrega;
@@ -23,6 +25,11 @@ public class Entrega {
         this.idMotorista = idMotorista;
         this.dataSaida = dataSaida;
         this.dataEntrega = dataEntrega;
+        this.status = status;
+    }
+
+    public Entrega(int idEntrega, String status) {
+        this.idEntrega = idEntrega;
         this.status = status;
     }
 

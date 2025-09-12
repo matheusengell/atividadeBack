@@ -63,6 +63,11 @@ public class Main {
                     criarHistorico();
                     break;
                 }
+                case 6:{
+                    atualizarStatusEntrega();
+                    break;
+                }
+
                 case 0: {
                     sair = true;
                     System.out.println("Encerrando sistema");
@@ -195,5 +200,24 @@ public class Main {
                 e.printStackTrace();
             }
         }
+        public static void atualizarStatusEntrega(){
+            System.out.println("==== Atualizando o status da entrega ====");
+            System.out.println("Digite o id da entrega que deseja alterar o status: ");
+            int idEntrega = leiaNum.nextInt();
+            System.out.println("Digite o status do pedido(EM_ROTA, ENTREGUE, ATRASADA): ");
+            String statusStr = leiaStr.nextLine().toUpperCase();
+            StatusEntrega StatusEntrega = org.example.model.enums.StatusEntrega.valueOf(statusStr);
+
+            var atualizarEntrega = new Entrega(idEntrega, statusStr);
+            var atualizarDao = new EntregaDAO();
+
+            try {
+                atualizarDao.atualizarStatus(atualizarEntrega);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
 
     }

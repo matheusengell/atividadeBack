@@ -2,6 +2,7 @@ package org.example.dao;
 
 import org.example.database.Conexao;
 import org.example.model.Entrega;
+import org.example.model.enums.StatusEntrega;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,7 +27,21 @@ public class EntregaDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
+    public void atualizarStatus(Entrega entrega) throws SQLException{
+        String query = "UPDATE Entrega SET status = ? WHERE id = ? ";
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(query)){
+
+            stmt.setString(1, entrega.getStatus());
+            stmt.setInt(2, entrega.getIdEntrega());
+            stmt.executeUpdate();
+            System.out.println("Status atualizado!");
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
 
     }
 }
