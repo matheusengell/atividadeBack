@@ -14,10 +14,10 @@ public class Main {
     static Scanner leiaNum = new Scanner(System.in);
     static Scanner leiaStr = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         inicio();
     }
-        public static void inicio(){
+        public static void inicio() throws SQLException {
             boolean sair = false;
 
             System.out.println("===== Sistema Entregas ======");
@@ -67,8 +67,24 @@ public class Main {
                     atualizarStatusEntrega();
                     break;
                 }
+                case 7: {
+                    listarEntregasClienteMotorista();
+                    break;
+                }
+                case 8:{
+                    relatorioEntregasMotorista();
+                    break;
+                }
+                case 9:{
+                    relatorioMaiorVolume();
+                    break;
+                }
+                case 10:{
+                    relatorioPendentesEstado();
+                    break;
+                }
 
-                case 0: {
+                case 0:{
                     sair = true;
                     System.out.println("Encerrando sistema");
                     break;
@@ -217,6 +233,51 @@ public class Main {
                 throw new RuntimeException(e);
             }
         }
+
+        public static void listarEntregasClienteMotorista(){
+            System.out.println("==== Listando todas entregas com cliente e motorista ====");
+            var listarDao = new EntregaDAO();
+
+            try {
+                listarDao.listarEntregas();
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+
+        public static void relatorioEntregasMotorista() throws SQLException{
+            System.out.println("==== Relatório de total de entregas por motorista ====");
+            var relatorioDao = new EntregaDAO();
+
+            try {
+                relatorioDao.totalEntregaMotorista();
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+
+        public static void relatorioMaiorVolume(){
+            System.out.println("==== Relatório de clientes com maior volume entregue ====");
+            var relatorioVolDao = new PedidoDAO();
+
+            try {
+                relatorioVolDao.clientesMaiorVolume();
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+
+        public static void relatorioPendentesEstado() throws SQLException{
+            System.out.println("==== Relatório dos pedidos pendentes por estado ====");
+            var relatorioPendentesDao = new PedidoDAO();
+         try {
+             relatorioPendentesDao.relatorioPendentesEstado();
+         }catch (SQLException e){
+             e.printStackTrace();
+         }
+        }
+
+
 
 
 

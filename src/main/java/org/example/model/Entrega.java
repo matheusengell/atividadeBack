@@ -33,6 +33,7 @@ public class Entrega {
         this.status = status;
     }
 
+
     public int getIdEntrega() {
         return idEntrega;
     }

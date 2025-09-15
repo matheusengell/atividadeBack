@@ -2,10 +2,10 @@ package org.example.dao;
 
 import org.example.database.Conexao;
 import org.example.model.Entrega;
-import org.example.model.enums.StatusEntrega;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class EntregaDAO {
@@ -42,6 +42,69 @@ public class EntregaDAO {
         }catch (SQLException e){
             e.printStackTrace();
         }
+
+    }
+
+    public void listarEntregas() throws SQLException{
+        String query = """
+                SELECT  m.nome AS motorista, c.nome AS cliente, e.data_saida, e.data_entrega, e.status
+                FROM Entrega e
+                JOIN Pedido p ON e.pedido_id = p.id
+                JOIN Cliente c ON p.cliente_id = c.id
+                JOIN Motorista m ON e.motorista_id = m.id;
+                """;
+
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(query)){
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()){
+                String nomeCliente = rs.getNString("cliente");
+                String nomeMotorista = rs.getString("motorista");
+                String dataSaida = rs.getString("data_saida");
+                String dataEntrega = rs.getString("data_entrega");
+                String status = rs.getString("status");
+
+                System.out.println(
+                        "Cliente: " + nomeCliente +
+                        ", Motorista: " + nomeMotorista +
+                        ", Saída: " + dataSaida +
+                        ", Entrega: " + dataEntrega +
+                        ", Status: " + status);
+            }
+
+            }catch (SQLException e){
+                e.printStackTrace();
+
+        }
+    }
+        public void totalEntregaMotorista()throws SQLException {
+            String query = """
+                    SELECT m.nome AS motorista, COUNT(*) AS total_entregas 
+                    FROM Entrega e
+                    JOIN Motorista m ON e.motorista_id = m.id
+                    GROUP BY m.nome;
+                    """;
+
+            try (Connection conn = Conexao.conectar();
+                PreparedStatement stmt = conn.prepareStatement(query)){
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()){
+                    String nomeMotorista = rs.getString("motorista");
+                    int totalENtregas = rs.getInt(", total_entregas");
+
+                    System.out.println("motorista: "+ nomeMotorista+
+                            "total entregas: "+ totalENtregas
+                    );
+
+                }
+
+                }catch (SQLException e){
+                e.printStackTrace();
+            }
+
+
 
     }
 }
