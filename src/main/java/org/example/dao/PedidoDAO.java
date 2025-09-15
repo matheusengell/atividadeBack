@@ -78,7 +78,7 @@ public class PedidoDAO {
 
             System.out.println(
                     "Status: " + status+
-                    ", Estado: " + estado
+                    ",  Estado: " + estado
             );}
 
         }catch (SQLException e){
