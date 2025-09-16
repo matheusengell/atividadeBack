@@ -83,6 +83,10 @@ public class Main {
                     relatorioPendentesEstado();
                     break;
                 }
+                case 11:{
+                    buscarPorCpf();
+                    break;
+                }
 
                 case 0:{
                     sair = true;
@@ -277,7 +281,20 @@ public class Main {
          }
         }
 
+        public static void buscarPorCpf() throws SQLException{
+            System.out.println("==== Buscar Pedido por CPF/CNPJ do cliente ====");
+            System.out.println("Digite o CPF/CNPJ que deseja: ");
+            String cpf_cnpj = leiaStr.nextLine();
 
+            var buscarcpf = new Cliente(cpf_cnpj);
+            var buscarcpfDao = new ClienteDAO();
+
+            try {
+                buscarcpfDao.buscarPorCPFCNPJ(buscarcpf);
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
 
 
 

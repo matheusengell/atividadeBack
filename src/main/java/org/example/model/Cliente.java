@@ -20,6 +20,10 @@ public class Cliente {
         this.estado = estado;
     }
 
+    public Cliente(String cpfCnpj) {
+        this.cpf_cnpj = cpfCnpj;
+    }
+
     public int getId() {
         return id;
     }
