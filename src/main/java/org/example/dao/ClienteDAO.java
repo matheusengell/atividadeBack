@@ -33,39 +33,55 @@ public class ClienteDAO {
     }
     public static void buscarPorCPFCNPJ(Cliente buscarcpf)throws SQLException{
         String query = """
-                SELECT p.id AS id_pedido,
+            SELECT 
+                p.id AS id_pedido,
                 p.data_pedido,
                 p.status,
                 c.nome AS cliente,
-                c.cpf_cnpj, 
+                c.cpf_cnpj,
                 c.estado
-                FROM Pedido p
-                JOIN Cliente c ON p.cliente_id = c.id
-                WHERE c.cpf_cnpj = ?;
-                """;
+            FROM Pedido p
+            JOIN Cliente c ON p.cliente_id = c.id
+            WHERE c.cpf_cnpj = ?;
+            """;
 
         try (Connection conn = Conexao.conectar();
-             PreparedStatement stmt = conn.prepareStatement(query)){
-            stmt.setString(1, String.valueOf(buscarcpf));
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
-            try (ResultSet rs = stmt.executeQuery()){
-            while (rs.next()) {
-                int idPedido = rs.getInt("id_pedido");
-                String dataPedido = rs.getString("data_pedido");
-                String status = rs.getString("status");
-                String cliente = rs.getString("cliente");
-                String documento = rs.getString("cpf_cnpj");
-                String estado = rs.getString("estado");
+            stmt.setString(1, buscarcpf.getCpf_cnpj());
 
-                System.out.printf(
-                        "Pedido %d | Data: %s | Status: %s | Cliente: %s (%s - %s)%n",
-                        idPedido, dataPedido, status, cliente, documento, estado
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int idPedido = rs.getInt("id_pedido");
+                    String dataPedido = rs.getString("data_pedido");
+                    String status = rs.getString("status");
+                    String cliente = rs.getString("cliente");
+                    String documento = rs.getString("cpf_cnpj");
+                    String estado = rs.getString("estado");
 
-                );
+                    System.out.printf(
+                            "Pedido %d | Data: %s | Status: %s | Cliente: %s (%s - %s)%n",
+                            idPedido, dataPedido, status, cliente, documento, estado
+                    );
+                }
             }
-            }
-        }   catch (SQLException e){
-                e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+
+    public static void exluirCliente(int idCliente) throws SQLException{
+
+        String query = "DELETE FROM Cliente WHERE id = ?";
+
+        try (Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setInt(1, idCliente);
+            stmt.executeUpdate();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
 }

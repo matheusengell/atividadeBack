@@ -28,8 +28,16 @@ public class Pedido {
         this.status = status;
     }
 
+    public Pedido(int idPedido) {
+        this.idPedido = idPedido;
+    }
+
+
     public int getIdPedido() {
         return idPedido;
+    }
+    public void setIdPedido(){
+        this.idPedido = idPedido;
     }
 
     public void setIdPedido(int idPedido) {

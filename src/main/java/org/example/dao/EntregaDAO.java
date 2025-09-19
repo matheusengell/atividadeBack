@@ -103,9 +103,72 @@ public class EntregaDAO {
                 }catch (SQLException e){
                 e.printStackTrace();
             }
-
-
-
     }
+
+    public void relatorioAtrasadoCidade() throws SQLException{
+        String query = """
+                SELECT\s
+                    e.id AS entrega_id,
+                    c.nome AS cliente,
+                    c.cidade,
+                    e.status
+                FROM Entrega e
+                JOIN Pedido p ON e.pedido_id = p.id
+                JOIN Cliente c ON p.cliente_id = c.id
+                WHERE e.status = 'ATRASADA';
+                """;
+
+        try (Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(query)){
+                ResultSet rs = stmt.executeQuery();
+
+                while(rs.next()){
+                    int idEntrega = rs.getInt( "entrega_id");
+                    String cidade = rs.getString("cidade");
+                    String status = rs.getString("status");
+
+
+                    System.out.println(
+                            "id: " + idEntrega +
+                             "|  cidade: "+ cidade+
+                            "|  status: "+ status
+                    );
+                }
+            }catch (SQLException e){
+            e.printStackTrace();
+        }
+        }
+
+    public boolean excluirEntregaPorId(int idEntrega) throws SQLException {
+        boolean excluido = false;
+
+        String delHistorico = "DELETE FROM HistoricoEntrega WHERE entrega_id = ?";
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmtHist = conn.prepareStatement(delHistorico)) {
+            stmtHist.setInt(1, idEntrega);
+            stmtHist.executeUpdate();
+        }
+
+        String queryDel = "DELETE FROM Entrega WHERE id = ?";
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(queryDel)) {
+
+            stmt.setInt(1, idEntrega);
+            int linhasAfetadas = stmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                excluido = true;
+                System.out.println("Entrega excluída com sucesso!");
+            } else {
+                System.out.println("Entrega não encontrada!");
+            }
+        }
+
+        return excluido;
+    }
+
+
 }
+
 

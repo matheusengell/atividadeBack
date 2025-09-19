@@ -20,26 +20,31 @@ public class Main {
         public static void inicio() throws SQLException {
             boolean sair = false;
 
-            System.out.println("===== Sistema Entregas ======");
-            System.out.println(""" 
-                    1 - Cadastrar Cliente
-                    2 - Cadastrar Motorista
-                    3 - Criar Pedido
-                    4 - Atribuir Pedido a Motorista (Gerar Entrega)
-                    5 - Registrar Evento de Entrega (Histórico)
-                    6 - Atualizar Status da Entrega
-                    7 - Listar Todas as Entregas com Cliente e Motorista
-                    8 - Relatório: Total de Entregas por Motorista
-                    9 - Relatório: Clientes com Maior Volume Entregue
-                    10 - Relatório: Pedidos Pendentes por Estado
-                    11 - Relatório: Entregas Atrasadas por Cidade
-                    12 - Buscar Pedido por CPF/CNPJ do Cliente
-                    13 - Cancelar Pedido
-                    14 - Excluir Entrega (com validação)
-                    15 - Excluir Cliente (com verificação de dependência)
-                    16 - Excluir Motorista (com verificação de dependência)
-                    0 - Sair
-                    """);
+            System.out.println(
+                    "=========================================\n" +
+                            "       SISTEMA DE LOGÍSTICA DE ENTREGAS  \n" +
+                            "=========================================\n" +
+                            "1  - Cadastrar Cliente\n" +
+                            "2  - Cadastrar Motorista\n" +
+                            "3  - Criar Pedido\n" +
+                            "4  - Atribuir Pedido a Motorista (Gerar Entrega)\n" +
+                            "5  - Registrar Evento de Entrega (Histórico)\n" +
+                            "6  - Atualizar Status da Entrega\n" +
+                            "7  - Listar Todas as Entregas com Cliente e Motorista\n" +
+                            "8  - Relatório: Total de Entregas por Motorista\n" +
+                            "9  - Relatório: Clientes com Maior Volume Entregue\n" +
+                            "10 - Relatório: Pedidos Pendentes por Estado\n" +
+                            "11 - Relatório: Entregas Atrasadas por Cidade\n" +
+                            "12 - Buscar Pedido por CPF/CNPJ do Cliente\n" +
+                            "13 - Cancelar Pedido\n" +
+                            "14 - Excluir Entrega (com validação)\n" +
+                            "15 - Excluir Cliente (com verificação de dependência)\n" +
+                            "16 - Excluir Motorista (com verificação de dependência)\n" +
+                            "0  - Sair\n" +
+                            "=========================================\n" +
+                            "Escolha uma opção: "
+            );
+
             int opcao = leiaNum.nextInt();
 
             switch (opcao) {
@@ -84,7 +89,19 @@ public class Main {
                     break;
                 }
                 case 11:{
+                    relatorioAtrasadasCidade();
+                    break;
+                }
+                case 12:{
                     buscarPorCpf();
+                    break;
+                }
+                case 13:{
+                    cancelarPedido();
+                    break;
+                }
+                case 14:{
+                    removerEntrega();
                     break;
                 }
 
@@ -281,6 +298,18 @@ public class Main {
          }
         }
 
+        public static void relatorioAtrasadasCidade() throws SQLException{
+            System.out.println("\n ==== Relatório das entregas atrasados por cidade ==== ");
+            var entregaAtrasadaDao = new EntregaDAO();
+
+            try {
+                entregaAtrasadaDao.relatorioAtrasadoCidade();
+
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+
         public static void buscarPorCpf() throws SQLException{
             System.out.println("==== Buscar Pedido por CPF/CNPJ do cliente ====");
             System.out.println("Digite o CPF/CNPJ que deseja: ");
@@ -296,6 +325,34 @@ public class Main {
             }
         }
 
+        public static void cancelarPedido() throws SQLException{
+            System.out.println("==== CANCELANDO PEDIDO POR ID ====");
+            System.out.println("Digite o id do pedido que deseja cancelar: ");
+            int idPedido = leiaNum.nextInt();
 
+            var cancelarPedido = new Pedido(idPedido);
+            var cancelarPedidoDao = new PedidoDAO();
 
+            try {
+                cancelarPedidoDao.cancelarPedido(cancelarPedido);
+            }
+            catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+
+    public static void removerEntrega() throws SQLException {
+        System.out.println("==== Removendo entrega ====");
+        System.out.print("Digite o ID da entrega que deseja remover: ");
+        int id = leiaNum.nextInt();
+
+        var entregaDao = new EntregaDAO();
+        try {
+            entregaDao.excluirEntregaPorId(id);
+        } catch (SQLException e) {
+            System.out.println("Erro ao excluir entrega: " + e.getMessage());
+        }
     }
+
+
+}

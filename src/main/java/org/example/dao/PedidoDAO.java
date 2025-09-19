@@ -86,4 +86,27 @@ public class PedidoDAO {
         }
     }
 
+    public void cancelarPedido(Pedido pedido) throws SQLException{
+        String query = """
+                UPDATE Pedido 
+                SET status = ?
+                WHERE id = ?
+                """;
+
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1,"CANCELADO");
+            stmt.setInt(2,pedido.getIdPedido());
+            stmt.executeUpdate();
+            System.out.println("Pedido Cancelado!");
+
+
+            }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+
+
+    }
+
 }
